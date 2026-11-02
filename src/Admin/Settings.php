@@ -224,7 +224,40 @@ final class Settings implements HasHooks
                 <?php submit_button(__('Save changes', 'rezervo')); ?>
             </form>
 
-            <?php $this->proUpsell()->cards(); ?>
+            <?php
+            $this->renderCompanionCard();
+            $this->proUpsell()->cards();
+            ?>
+        </div>
+        <?php
+    }
+
+    /**
+     * Cross-recommendation card for sister plugins (Waitlist - Back in Stock).
+     * Strictly scoped to the Rezervo settings screen per WordPress.org Guideline 11.
+     */
+    private function renderCompanionCard(): void
+    {
+        $isWaitlistActive = defined('\\Waitlist\\VERSION') || (function_exists('is_plugin_active') && (is_plugin_active('plogins-waitlist/plogins-waitlist.php') || is_plugin_active('waitlist/waitlist.php')));
+
+        ?>
+        <div class="card" style="max-width: 800px; margin-top: 24px; padding: 18px 22px;">
+            <h2 class="title" style="margin-top: 0; font-size: 15px;"><?php echo esc_html__('Complementary integration: Waitlist - Back in Stock for WooCommerce', 'rezervo'); ?></h2>
+            <p style="color: #50575e; line-height: 1.5;">
+                <?php echo esc_html__('Pair pre-orders with back in stock waitlists so shoppers can subscribe for email restock alerts on products not eligible for pre-order.', 'rezervo'); ?>
+            </p>
+            <?php if ($isWaitlistActive) : ?>
+                <p style="color: #007017; font-weight: 600; margin-bottom: 0;">
+                    <span class="dashicons dashicons-yes-alt" style="vertical-align: text-bottom;"></span>
+                    <?php echo esc_html__('Waitlist is active.', 'rezervo'); ?>
+                </p>
+            <?php else : ?>
+                <p style="margin-bottom: 0;">
+                    <a href="<?php echo esc_url(admin_url('plugin-install.php?s=' . rawurlencode('Waitlist - Back in Stock for WooCommerce') . '&tab=search&type=term')); ?>" class="button button-secondary">
+                        <?php echo esc_html__('Explore Waitlist Back in Stock', 'rezervo'); ?> &rarr;
+                    </a>
+                </p>
+            <?php endif; ?>
         </div>
         <?php
     }
