@@ -116,8 +116,9 @@ Yes. This plugin is compatible with WordPress Multisite. Network activate it or 
 
 == Screenshots ==
 
-1. The pre-order field in the WooCommerce product editor.
-2. The WooCommerce > Pre-orders settings screen.
+1. Pre-order notice with the expected release date and a Pre-order now button.
+2. Settings under WooCommerce > Pre-orders.
+3. A pre-order product on a phone.
 
 == External Services ==
 
