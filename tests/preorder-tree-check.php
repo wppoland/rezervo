@@ -1,20 +1,14 @@
 <?php
 
 /**
- * Asking "does anything in this product tree pre-order" must not cost a product
- * object per variation.
+ * A variation follows its parent product, and asking "does anything in this
+ * product tree pre-order" costs no product object per variation.
  *
- * hasPreorderInTree() loaded every variation with wc_get_product() and asked
- * each one, and the single product page asks the question twice: once to decide
- * whether to enqueue the storefront assets, once to render the stub. A product
- * with fifty variations and no pre-order anywhere built a hundred product
- * objects, each of which reads its own meta, to be told no.
- *
- * A variation with no flag of its own inherits the parent's, and the parent is
- * checked first, so the remaining question is one meta value per variation.
- * This harness asserts the answer is unchanged, that nothing is hydrated to
- * reach it, and that an add-on filtering `preorder/is_preorder` is still shown
- * every variation.
+ * - A variation of a pre-order parent is a pre-order with the parent's release
+ *   date. Pre-order meta stored on the variation itself is ignored.
+ * - With no add-on filtering `preorder/is_preorder`, the parent's answer is the
+ *   tree's answer: no variation is loaded and no variation meta is read.
+ * - An add-on filtering `preorder/is_preorder` is still shown every variation.
  *
  * Run: php tests/preorder-tree-check.php
  */
@@ -153,60 +147,56 @@ function preorder_test_tree(\Preorder\ProductMeta $meta, WC_Product $product): a
 
 $failures = [];
 
-// One variation carries the flag: the tree pre-orders, and nothing is loaded.
+// Pre-order meta on a variation is ignored: the parent said no, so the tree
+// says no, and nothing is loaded or primed to find that out.
 $flagged = preorder_test_tree_of(10, [
     11 => [],
-    12 => ['_preorder_enabled' => 'yes'],
+    12 => ['_preorder_enabled' => 'yes', '_preorder_release_date' => '2030-01-01'],
     13 => ['_preorder_enabled' => ''],
 ]);
 [$answer, $hydrations, $primes] = preorder_test_tree($meta, $flagged);
-if (true !== $answer) {
-    $failures[] = 'a flagged variation was not found';
-}
-if (0 !== $hydrations) {
-    $failures[] = sprintf('a flagged variation cost %d product load(s), expected 0', $hydrations);
-}
-if (1 !== $primes) {
-    $failures[] = sprintf('the variation meta was primed %d time(s), expected 1', $primes);
-}
-
-// No variation carries it: the answer is no, and still nothing is loaded. This
-// is the case that used to be the most expensive, because it never short-cut.
-$none = preorder_test_tree_of(20, [
-    21 => [],
-    22 => ['_preorder_enabled' => ''],
-]);
-[$answer, $hydrations, $primes] = preorder_test_tree($meta, $none);
 if (false !== $answer) {
-    $failures[] = 'a tree with no pre-order answered yes';
+    $failures[] = 'variation meta made the tree a pre-order';
 }
-if (0 !== $hydrations) {
-    $failures[] = sprintf('a tree with no pre-order cost %d product load(s), expected 0', $hydrations);
+if (0 !== $hydrations || 0 !== $primes) {
+    $failures[] = sprintf('a tree with no pre-order cost %d load(s) and %d prime(s), expected 0', $hydrations, $primes);
 }
-if (1 !== $primes) {
-    $failures[] = sprintf('a tree with no pre-order primed meta %d time(s), expected 1', $primes);
+if ($meta->isPreorder($preorder_test_products[12])) {
+    $failures[] = 'a variation flagged on its own became a pre-order';
 }
 
-// The parent's own flag still wins without touching the variations at all.
-$parentFlagged = preorder_test_tree_of(30, [31 => [], 32 => []], ['_preorder_enabled' => 'yes']);
+// The parent's flag makes the tree, and every variation, a pre-order.
+$parentFlagged = preorder_test_tree_of(30, [
+    31 => [],
+    32 => ['_preorder_enabled' => '', '_preorder_release_date' => '2031-02-02'],
+], ['_preorder_enabled' => 'yes', '_preorder_release_date' => '2030-06-15']);
 [$answer, $hydrations, $primes] = preorder_test_tree($meta, $parentFlagged);
 if (true !== $answer || 0 !== $hydrations || 0 !== $primes) {
     $failures[] = 'a flagged parent no longer answers on its own';
+}
+foreach ([31, 32] as $variationId) {
+    $variation = $preorder_test_products[$variationId];
+    if (! $meta->isPreorder($variation)) {
+        $failures[] = sprintf('variation %d of a pre-order parent is not a pre-order', $variationId);
+    }
+    if ('2030-06-15' !== $meta->releaseDate($variation)) {
+        $failures[] = sprintf('variation %d does not carry the parent release date', $variationId);
+    }
 }
 
 // A variable product with no variations yet.
 $empty = preorder_test_tree_of(40, []);
 [$answer, $hydrations, $primes] = preorder_test_tree($meta, $empty);
-if (false !== $answer || 0 !== $primes) {
+if (false !== $answer || 0 !== $hydrations) {
     $failures[] = 'a variable product with no variations was not answered for free';
 }
 
 // An add-on filtering the answer must still be asked about every variation,
 // which means the variations have to be loaded for it.
 $preorder_test_filter = static function (bool $enabled, $product): bool {
-    return $enabled || 22 === $product->get_id();
+    return $enabled || 12 === $product->get_id();
 };
-[$answer, $hydrations, $primes] = preorder_test_tree($meta, $none);
+[$answer, $hydrations, $primes] = preorder_test_tree($meta, $flagged);
 if (true !== $answer) {
     $failures[] = 'an add-on flagging a variation was ignored';
 }
@@ -223,4 +213,4 @@ if ([] !== $failures) {
     exit(1);
 }
 
-echo "preorder-tree-check: OK (5 cases, no product object loaded to read a flag)\n";
+echo "preorder-tree-check: OK (4 cases, variations follow the parent)\n";

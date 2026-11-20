@@ -5,6 +5,7 @@
  *
  * - Waitlist: a pre-order product or variation takes no "Notify me" signups;
  *   a variable parent passes through so each variation is asked on its own.
+ *   A variation follows its parent; pre-order meta on the variation is ignored.
  * - Klepsidro: the countdown ends at the earliest release day still ahead,
  *   in the store timezone; a past or missing date leaves Klepsidro's answer.
  *
@@ -101,7 +102,7 @@ namespace {
     new WC_Product(11, 'variation', [], $on, 10);
     new WC_Product(12, 'variation', [], [], 10);
     $check('variable parent passes through', true === $service->filterWaitlistAccepts(true, $mixed));
-    $check('pre-order variation: no waitlist', false === $service->filterWaitlistAccepts(true, wc_get_product(11)));
+    $check('variation flag of its own is ignored, keeps the waitlist', true === $service->filterWaitlistAccepts(true, wc_get_product(11)));
     $check('plain variation of the same product keeps it', true === $service->filterWaitlistAccepts(true, wc_get_product(12)));
 
     $inheritParent = new WC_Product(20, 'variable', [21], $on);
@@ -124,11 +125,12 @@ namespace {
     new WC_Product(42, 'variation', [], $on + ['_preorder_release_date' => $date('+5 days')], 40);
     new WC_Product(43, 'variation', [], $on + ['_preorder_release_date' => $date('-2 days')], 40);
     new WC_Product(44, 'variation', [], ['_preorder_release_date' => $date('+1 day')], 40);
-    $check('variable: earliest future release among pre-order variations', $dayStart('+5 days') === $service->filterCountdownEnd(null, $variable));
+    $check('variable: variation flags and dates of their own are ignored', null === $service->filterCountdownEnd(null, $variable));
 
     $inherit = new WC_Product(50, 'variable', [51], $on + ['_preorder_release_date' => $date('+7 days')]);
-    new WC_Product(51, 'variation', [], [], 50);
+    new WC_Product(51, 'variation', [], ['_preorder_release_date' => $date('+3 days')], 50);
     $check('variable: parent date counts', $dayStart('+7 days') === $service->filterCountdownEnd(null, $inherit));
+    $check('variation of a pre-order parent: parent date', $dayStart('+7 days') === $service->filterCountdownEnd(null, wc_get_product(51)));
 
     // Wording only when the timer shows the release.
     $args = $service->filterCountdownArgs(['product_id' => 30, 'end_ts' => $dayStart('+10 days')], 'single-product/countdown');

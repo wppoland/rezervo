@@ -4,7 +4,7 @@ Tags: woocommerce, preorder, pre-order, backorder, out of stock
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -136,6 +136,9 @@ Rezervo is fully translatable and ships the `rezervo.pot` template. Translations
 
 == Changelog ==
 
+= 1.1.8 =
+* Changed: a variation now always follows its parent product. It is a pre-order when the parent is, with the parent's expected release date, and the stub shows from the moment the product page opens. Pre-order values stored on a variation itself are no longer read; add-ons can still decide per variation through the `preorder/is_preorder` and `preorder/release_date` filters.
+
 = 1.1.7 =
 * Translations: Polish, German and Spanish cover the newest interface strings.
 
@@ -163,14 +166,14 @@ Rezervo is fully translatable and ships the `rezervo.pot` template. Translations
 * Renamed to Rezervo. The WordPress.org review team asks a plugin name to lead with a distinctive, coined identifier rather than a generic descriptive word. Rezervo is Esperanto for a reservation. The text domain follows the name; the stored data, the settings and every hook are unchanged.
 
 = 1.0.12 =
-* Fixed: a variable product asked whether anything in it pre-orders by loading a full product object per variation, and the single product page asks that question twice, so a product with fifty variations built a hundred product objects on every view to be told no. The answer now comes from the variation meta, primed in one query. A plugin filtering `preorder/is_preorder` is still shown every variation.
+* Fixed: a variable product asked whether anything in it pre-orders by loading a full product object per variation, and the single product page asks that question twice, so a product with fifty variations built a hundred product objects on every view to be told no. The answer no longer builds a product object per variation. A plugin filtering `preorder/is_preorder` is still shown every variation.
 
 = 1.0.11 =
 * Fixed: the PRO upgrade promo kept selling to people who had already bought the paid edition. Only the banner could be dismissed, so the sidebar promo and the locked feature cards followed a paying customer around for good. The promo now checks whether the paid edition is active and steps aside when it is.
 * Fixed: arrow glyphs in the admin menu paths, and in the strings handed to translators. An arrow inside a translatable string makes the glyph every translator's problem and changes the layout in any locale that drops it.
 
 = 1.0.10 =
-* Fixed: on a variable product the expected release date never reached the shopper. Each variation stored its own date and the product page printed the parent product's, which a variable product rarely has, so the line was simply absent. Picking a variation now shows that variation's date.
+* Fixed: on a variable product the expected release date was missing from the pre-order stub on the product page.
 * Fixed: deleting the plugin left the per-user "dismiss" flag from the PRO notice in the database. Uninstall now removes it for every user, not just the one who dismissed it.
 
 = 1.0.9 =
