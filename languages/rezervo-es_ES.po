@@ -29,8 +29,8 @@ msgstr "https://plogins.com/rezervo/"
 #. Description of the plugin
 #: rezervo.php
 msgid ""
-"Let customers pre-order upcoming or out-of-stock WooCommerce products with a "
-"custom add-to-cart button."
+"Let customers pre-order upcoming or out-of-stock WooCommerce products with a"
+" custom add-to-cart button."
 msgstr ""
 "Permita que los clientes realicen pedidos anticipados de productos "
 "WooCommerce próximos o agotados con un botón personalizado para añadir al "
@@ -140,8 +140,8 @@ msgid ""
 "General). The options here set the store-wide defaults that those products "
 "inherit."
 msgstr ""
-"Marca cualquier producto como pedido anticipado desde el editor de productos "
-"(Datos del producto > General). Las opciones aquí establecen los valores "
+"Marca cualquier producto como pedido anticipado desde el editor de productos"
+" (Datos del producto > General). Las opciones aquí establecen los valores "
 "predeterminados en toda la tienda que heredan esos productos."
 
 #: src/Admin/Settings.php:151
@@ -180,8 +180,8 @@ msgstr "Botón de reserva"
 #: src/Admin/Settings.php:186
 msgid "The label shoppers see in place of the usual add-to-cart text."
 msgstr ""
-"La etiqueta que los compradores ven en lugar del texto habitual de añadir al "
-"carrito."
+"La etiqueta que los compradores ven en lugar del texto habitual de añadir al"
+" carrito."
 
 #: src/Admin/Settings.php:193
 msgid "Default button text"
@@ -195,8 +195,8 @@ msgstr "Los compradores ven:"
 #: src/Admin/Settings.php:213
 #, php-format
 msgid ""
-"Replaces the add-to-cart label on pre-order products across the store. Leave "
-"blank to use %s."
+"Replaces the add-to-cart label on pre-order products across the store. Leave"
+" blank to use %s."
 msgstr ""
 "Reemplaza la etiqueta de añadir al carrito en los productos en pedido "
 "anticipado de toda la tienda. Déjalo en blanco para usar %s."
@@ -211,21 +211,21 @@ msgstr "No tienes permiso para gestionar estos ajustes."
 
 #: src/Service/PreorderService.php:129
 msgid "Releases in"
-msgstr ""
+msgstr "Se lanza en"
 
 #. translators: %s: time left until the release, e.g. "2 hrs 5 min".
 #: src/Service/PreorderService.php:131
 #, php-format
 msgid "Releases in %s"
-msgstr ""
+msgstr "Se lanza en %s"
 
 #: src/Service/PreorderService.php:132
 msgid "Release countdown"
-msgstr ""
+msgstr "Cuenta atrás para el lanzamiento"
 
 #: src/Service/PreorderService.php:133
 msgid "The release date has arrived."
-msgstr ""
+msgstr "Ha llegado la fecha de lanzamiento."
 
 #. translators: %s: formatted release date
 #: src/Service/PreorderService.php:306
@@ -239,7 +239,8 @@ msgstr "Reservado como reserva"
 
 #: src/Service/PreorderService.php:321
 msgid ""
-"Not in stock yet, your order holds a place in line and ships when it arrives."
+"Not in stock yet, your order holds a place in line and ships when it "
+"arrives."
 msgstr ""
 "Aún no está en stock, su pedido mantiene un lugar en la fila y se envía "
 "cuando llega."
@@ -270,17 +271,17 @@ msgstr "Reserva ahora"
 #~ msgid ""
 #~ "Rezervo - Pre-Orders for WooCommerce requires WooCommerce to be active."
 #~ msgstr ""
-#~ "Plogins Pedido anticipado: los pedidos anticipados de WooCommerce "
-#~ "requieren que WooCommerce esté activo."
+#~ "Plogins Pedido anticipado: los pedidos anticipados de WooCommerce requieren "
+#~ "que WooCommerce esté activo."
 
 #, php-format
 #~ msgid ""
-#~ "Replaces the add-to-cart label on pre-order products. Leave blank to use "
-#~ "%s. Any single product can override this from its own editor."
+#~ "Replaces the add-to-cart label on pre-order products. Leave blank to use %s."
+#~ " Any single product can override this from its own editor."
 #~ msgstr ""
-#~ "Reemplaza la etiqueta de añadir al carrito en productos reservados. "
-#~ "Déjelo en blanco para usar %s. Cualquier producto puede anular esto desde "
-#~ "su propio editor."
+#~ "Reemplaza la etiqueta de añadir al carrito en productos reservados. Déjelo "
+#~ "en blanco para usar %s. Cualquier producto puede anular esto desde su propio"
+#~ " editor."
 
 #, php-format
 #~ msgid "od %d zł/rok"

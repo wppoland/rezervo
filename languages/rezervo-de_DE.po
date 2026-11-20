@@ -29,8 +29,8 @@ msgstr "https://plogins.com/rezervo/"
 #. Description of the plugin
 #: rezervo.php
 msgid ""
-"Let customers pre-order upcoming or out-of-stock WooCommerce products with a "
-"custom add-to-cart button."
+"Let customers pre-order upcoming or out-of-stock WooCommerce products with a"
+" custom add-to-cart button."
 msgstr ""
 "Ermögliche Kunden, bevorstehende oder nicht mehr vorrätige WooCommerce-"
 "Produkte mit einer benutzerdefinierten Schaltfläche zum Hinzufügen zum "
@@ -193,8 +193,8 @@ msgstr "Käufer sehen:"
 #: src/Admin/Settings.php:213
 #, php-format
 msgid ""
-"Replaces the add-to-cart label on pre-order products across the store. Leave "
-"blank to use %s."
+"Replaces the add-to-cart label on pre-order products across the store. Leave"
+" blank to use %s."
 msgstr ""
 "Ersetzt im gesamten Shop die Beschriftung „In den Warenkorb“ bei "
 "Vorbestellungsprodukten. Lass das Feld leer, um %s zu verwenden."
@@ -209,21 +209,21 @@ msgstr "Du hast keine Berechtigung, diese Einstellungen zu verwalten."
 
 #: src/Service/PreorderService.php:129
 msgid "Releases in"
-msgstr ""
+msgstr "Erscheint in"
 
 #. translators: %s: time left until the release, e.g. "2 hrs 5 min".
 #: src/Service/PreorderService.php:131
 #, php-format
 msgid "Releases in %s"
-msgstr ""
+msgstr "Erscheint in %s"
 
 #: src/Service/PreorderService.php:132
 msgid "Release countdown"
-msgstr ""
+msgstr "Countdown bis zum Erscheinen"
 
 #: src/Service/PreorderService.php:133
 msgid "The release date has arrived."
-msgstr ""
+msgstr "Der Erscheinungstermin ist erreicht."
 
 #. translators: %s: formatted release date
 #: src/Service/PreorderService.php:306
@@ -237,7 +237,8 @@ msgstr "Als Vorbestellung reserviert"
 
 #: src/Service/PreorderService.php:321
 msgid ""
-"Not in stock yet, your order holds a place in line and ships when it arrives."
+"Not in stock yet, your order holds a place in line and ships when it "
+"arrives."
 msgstr ""
 "Noch nicht auf Lager, deine Bestellung bleibt in der Warteschlange und wird "
 "versendet, sobald sie eintrifft."
@@ -273,12 +274,12 @@ msgstr "jetzt vorbestellen"
 
 #, php-format
 #~ msgid ""
-#~ "Replaces the add-to-cart label on pre-order products. Leave blank to use "
-#~ "%s. Any single product can override this from its own editor."
+#~ "Replaces the add-to-cart label on pre-order products. Leave blank to use %s."
+#~ " Any single product can override this from its own editor."
 #~ msgstr ""
-#~ "Ersetzt das Add-to-Cart-Etikett bei vorbestellten Produkten. Lass das "
-#~ "Feld leer, um %s zu verwenden. Jedes einzelne Produkt kann dies in seinem "
-#~ "eigenen Editor überschreiben."
+#~ "Ersetzt das Add-to-Cart-Etikett bei vorbestellten Produkten. Lass das Feld "
+#~ "leer, um %s zu verwenden. Jedes einzelne Produkt kann dies in seinem eigenen"
+#~ " Editor überschreiben."
 
 #, php-format
 #~ msgid "od %d zł/rok"
