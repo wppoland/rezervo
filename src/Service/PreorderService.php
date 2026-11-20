@@ -47,9 +47,6 @@ final class PreorderService implements HasHooks
         add_filter('woocommerce_product_single_add_to_cart_text', [$this, 'filterButtonText'], 10, 2);
         add_filter('woocommerce_product_add_to_cart_text', [$this, 'filterButtonText'], 10, 2);
 
-        // Per-variation pre-order data for the variations form.
-        add_filter('woocommerce_available_variation', [$this, 'addVariationData'], 10, 3);
-
         // Storefront: show the reservation stub on the single product page.
         add_action('woocommerce_single_product_summary', [$this, 'renderStub'], 25);
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
@@ -71,8 +68,7 @@ final class PreorderService implements HasHooks
      * Take a pre-order product or variation off the Waitlist.
      *
      * A variable parent passes through: the waitlist asks again per variation,
-     * so a product mixing pre-order and in-stock variations keeps the form for
-     * the ones that are simply out of stock.
+     * so an add-on deciding per variation is asked about each one.
      */
     public function filterWaitlistAccepts(bool $accepts, mixed $product): bool
     {
@@ -139,7 +135,7 @@ final class PreorderService implements HasHooks
      * Start of the earliest release day still ahead (store timezone), or null.
      *
      * A variable product counts down to the first of its pre-order variations
-     * to come out; a variation without its own date inherits the parent's.
+     * to come out; a variation follows its parent unless an add-on filters it.
      */
     private function nextReleaseTimestamp(\WC_Product $product): ?int
     {
@@ -262,34 +258,19 @@ final class PreorderService implements HasHooks
         wp_enqueue_script(
             'preorder-storefront',
             PREORDER_URL . 'assets/js/storefront.js',
-            ['jquery'],
+            [],
             \Preorder\VERSION,
             true
-        );
-
-        wp_localize_script(
-            'preorder-storefront',
-            'preorderStorefront',
-            [
-                'buttonText' => $this->settings->defaultButtonText(),
-            ],
         );
     }
 
     /**
-     * Render the reservation stub on the single product page.
-     *
-     * Presentation only: a paper claim-ticket that tells the shopper the item
-     * is inbound and they are holding a place in line. The cart behaviour is
-     * handled by the filters above and is unaffected by this output.
-     */
-    /**
      * "Expected release: 5 June 2026", or an empty string when there is no date.
      *
-     * Shared with the variation payload so the storefront cannot end up with
-     * two different wordings or two different date formats for one fact.
+     * Public so an add-on showing a release date uses the same wording and
+     * date format as the stub.
      */
-    private function releaseSentence(string $release): string
+    public function releaseSentence(string $release): string
     {
         if ($release === '') {
             return '';
@@ -308,6 +289,13 @@ final class PreorderService implements HasHooks
         );
     }
 
+    /**
+     * Render the reservation stub on the single product page.
+     *
+     * Presentation only: a paper claim-ticket that tells the shopper the item
+     * is inbound and they are holding a place in line. The cart behaviour is
+     * handled by the filters above and is unaffected by this output.
+     */
     public function renderStub(): void
     {
         global $product;
@@ -322,9 +310,8 @@ final class PreorderService implements HasHooks
         $release = $visible ? $this->meta->releaseDate($product) : '';
 
         printf(
-            '<div class="preorder-stub%1$s" role="note"%2$s>',
+            '<div class="preorder-stub%s" role="note">',
             $visible ? '' : ' preorder-stub--hidden',
-            $product->is_type('variable') ? ' data-preorder-variable="1"' : '',
         );
         echo '<span class="preorder-stub__punch" aria-hidden="true"></span>';
         echo '<span class="preorder-stub__label">';
@@ -333,42 +320,14 @@ final class PreorderService implements HasHooks
         echo esc_html($title);
         echo '</span>';
         echo '<span class="preorder-stub__note">' . esc_html($note) . '</span>';
-        // Always print the element, even empty. On a variable product the date
-        // belongs to the variation, so the script fills this in on
-        // show_variation, and it cannot fill in an element that is not there.
+        // Always print the element, even empty, so an add-on that changes the
+        // date on the page has an element to fill in.
         printf(
             '<span class="preorder-stub__release">%s</span>',
             esc_html($this->releaseSentence($release)),
         );
         echo '</span>';
         echo '</div>';
-    }
-
-    /**
-     * Expose per-variation pre-order state to the variations form JSON.
-     *
-     * @param array<string, mixed> $data
-     * @return array<string, mixed>
-     */
-    public function addVariationData(array $data, \WC_Product_Variable $product, \WC_Product_Variation $variation): array
-    {
-        unset($product);
-
-        $isPreorder = $this->applies($variation);
-
-        $data['preorder_is_preorder']      = $isPreorder;
-        $data['preorder_add_to_cart_text'] = $isPreorder ? $this->settings->defaultButtonText() : '';
-        $release = $isPreorder ? $this->meta->releaseDate($variation) : '';
-
-        $data['preorder_release_date'] = $release;
-        // The raw date above was published and never read by anything, so a
-        // variation's release date never reached the shopper: the stub prints
-        // the PARENT product's date, and a variable product rarely has one.
-        // This carries the finished sentence, formatted and translated once on
-        // the server, so the script has nothing to format.
-        $data['preorder_release_text'] = $this->releaseSentence($release);
-
-        return $data;
     }
 
     /**

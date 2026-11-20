@@ -23,8 +23,8 @@ final class ProductMeta
     /**
      * Whether the product (or variation) is flagged as a pre-order.
      *
-     * Variations without their own meta inherit the parent product flag.
-     * Add-ons filter `preorder/is_preorder` to extend or override the result.
+     * A variation follows its parent product. Add-ons filter
+     * `preorder/is_preorder` to extend or override the result.
      */
     public function isPreorder(\WC_Product $product): bool
     {
@@ -55,34 +55,15 @@ final class ProductMeta
             return false;
         }
 
-        $children = $product->get_children();
-
-        if ([] === $children) {
-            return false;
-        }
-
-        // A variation with no flag of its own inherits the parent's, and the
-        // parent has just answered no, so the only question left is whether any
-        // variation carries the flag itself. That is one meta value each, primed
-        // in a single query, rather than a full WC_Product per variation. The
-        // page asks this twice, once to decide on assets and once to render the
-        // stub, so a product with fifty variations and no pre-order anywhere was
-        // building a hundred product objects to be told no.
+        // A variation follows its parent, and the parent has just answered no,
+        // so without an add-on filtering the answer there is nothing left to ask.
         if (! has_filter('preorder/is_preorder')) {
-            update_meta_cache('post', $children);
-
-            foreach ($children as $childId) {
-                if ('yes' === get_post_meta((int) $childId, self::META_ENABLED, true)) {
-                    return true;
-                }
-            }
-
             return false;
         }
 
         // An add-on is filtering the answer, so it has to be asked about every
         // variation, which means every variation has to be loaded.
-        foreach ($children as $childId) {
+        foreach ($product->get_children() as $childId) {
             $child = wc_get_product($childId);
             if ($child instanceof \WC_Product && $this->isPreorder($child)) {
                 return true;
@@ -95,7 +76,7 @@ final class ProductMeta
     /**
      * Expected release date for a pre-order product or variation (Y-m-d), or empty.
      *
-     * Variations with their own date override the parent. Add-ons filter
+     * A variation follows its parent product. Add-ons filter
      * `preorder/release_date` to extend or override the result.
      */
     public function releaseDate(\WC_Product $product): string
@@ -113,20 +94,9 @@ final class ProductMeta
 
     private function resolveReleaseDate(\WC_Product $product): string
     {
-        if ($product->is_type('variation')) {
-            if ($product->meta_exists(self::META_RELEASE_DATE)) {
-                return $this->sanitizeDate((string) $product->get_meta(self::META_RELEASE_DATE));
-            }
+        $product = $this->owner($product);
 
-            $parent = wc_get_product($product->get_parent_id());
-            if ($parent instanceof \WC_Product) {
-                return $this->resolveReleaseDate($parent);
-            }
-
-            return '';
-        }
-
-        return $this->sanitizeDate((string) $product->get_meta(self::META_RELEASE_DATE));
+        return null === $product ? '' : $this->sanitizeDate((string) $product->get_meta(self::META_RELEASE_DATE));
     }
 
     private function sanitizeDate(string $raw): string
@@ -144,19 +114,22 @@ final class ProductMeta
 
     private function resolveEnabled(\WC_Product $product): bool
     {
-        if ($product->is_type('variation')) {
-            if ($product->meta_exists(self::META_ENABLED)) {
-                return 'yes' === $product->get_meta(self::META_ENABLED);
-            }
+        $product = $this->owner($product);
 
-            $parent = wc_get_product($product->get_parent_id());
-            if ($parent instanceof \WC_Product) {
-                return $this->resolveEnabled($parent);
-            }
+        return null !== $product && 'yes' === $product->get_meta(self::META_ENABLED);
+    }
 
-            return false;
+    /**
+     * The product whose settings apply: a variation answers with its parent.
+     */
+    private function owner(\WC_Product $product): ?\WC_Product
+    {
+        if (! $product->is_type('variation')) {
+            return $product;
         }
 
-        return 'yes' === $product->get_meta(self::META_ENABLED);
+        $parent = wc_get_product($product->get_parent_id());
+
+        return $parent instanceof \WC_Product ? $parent : null;
     }
 }

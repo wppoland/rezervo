@@ -10,79 +10,13 @@
  * is suppressed there; we still toggle the class so the dot reaches its rest
  * state).
  */
-( function ( $ ) {
+( function () {
 	'use strict';
 
 	function validate( stub ) {
-		if ( ! stub ) {
-			return;
-		}
 		stub.classList.remove( 'is-validated' );
 		void stub.offsetWidth;
 		stub.classList.add( 'is-validated' );
-	}
-
-	function setStubVisible( stub, visible ) {
-		if ( ! stub ) {
-			return;
-		}
-		stub.classList.toggle( 'preorder-stub--hidden', ! visible );
-		if ( visible ) {
-			validate( stub );
-		}
-	}
-
-	function defaultButtonText( button ) {
-		if ( ! button ) {
-			return '';
-		}
-		return button.getAttribute( 'data-preorder-default-text' ) || button.textContent || '';
-	}
-
-	function setButtonText( button, text ) {
-		if ( ! button || ! text ) {
-			return;
-		}
-		button.textContent = text;
-	}
-
-	// A variable product's release date belongs to the variation, not to the
-	// parent, so the server renders this element empty and it is filled in
-	// here. It used to be left out entirely and the date never reached anyone.
-	function setReleaseText( stub, text ) {
-		if ( ! stub ) {
-			return;
-		}
-		var el = stub.querySelector( '.preorder-stub__release' );
-		if ( ! el ) {
-			return;
-		}
-		el.textContent = text || '';
-	}
-
-	function initVariableProduct( stub, form ) {
-		var button = form.querySelector( '.single_add_to_cart_button' );
-
-		if ( button && ! button.getAttribute( 'data-preorder-default-text' ) ) {
-			button.setAttribute( 'data-preorder-default-text', button.textContent || '' );
-		}
-
-		$( form ).on( 'show_variation', function ( event, variation ) {
-			var isPreorder = variation && variation.preorder_is_preorder;
-			setStubVisible( stub, !! isPreorder );
-			setReleaseText( stub, isPreorder ? variation.preorder_release_text : '' );
-			if ( isPreorder && variation.preorder_add_to_cart_text ) {
-				setButtonText( button, variation.preorder_add_to_cart_text );
-			} else {
-				setButtonText( button, defaultButtonText( button ) );
-			}
-		} );
-
-		$( form ).on( 'hide_variation', function () {
-			setStubVisible( stub, false );
-			setReleaseText( stub, '' );
-			setButtonText( button, defaultButtonText( button ) );
-		} );
 	}
 
 	function init() {
@@ -91,16 +25,12 @@
 			return;
 		}
 
-		if ( ! stub.hasAttribute( 'data-preorder-variable' ) ) {
+		if ( ! stub.classList.contains( 'preorder-stub--hidden' ) ) {
 			validate( stub );
 		}
 
 		var form = stub.closest( 'form.cart' ) || document.querySelector( 'form.cart' );
 		if ( form ) {
-			if ( stub.hasAttribute( 'data-preorder-variable' ) ) {
-				initVariableProduct( stub, form );
-			}
-
 			form.addEventListener( 'submit', function () {
 				if ( ! stub.classList.contains( 'preorder-stub--hidden' ) ) {
 					validate( stub );
@@ -114,4 +44,4 @@
 	} else {
 		init();
 	}
-}( window.jQuery ) );
+}() );
