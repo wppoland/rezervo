@@ -12,8 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
-"|| n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Domain: rezervo\n"
 "X-Generator: WP-CLI 2.12.0\n"
 
@@ -30,8 +29,8 @@ msgstr "https://plogins.com/rezervo/"
 #. Description of the plugin
 #: rezervo.php
 msgid ""
-"Let customers pre-order upcoming or out-of-stock WooCommerce products with a "
-"custom add-to-cart button."
+"Let customers pre-order upcoming or out-of-stock WooCommerce products with a"
+" custom add-to-cart button."
 msgstr ""
 "Pozwól klientom zamawiać w przedsprzedaży nadchodzące lub niedostępne "
 "produkty WooCommerce dzięki niestandardowemu przyciskowi dodawania do "
@@ -73,8 +72,8 @@ msgid ""
 "Optional. Shown on the product page and used by add-ons for release "
 "notifications."
 msgstr ""
-"Opcjonalne. Pokazywana na stronie produktu i wykorzystywana przez dodatki do "
-"powiadomień o premierze."
+"Opcjonalne. Pokazywana na stronie produktu i wykorzystywana przez dodatki do"
+" powiadomień o premierze."
 
 #: src/Admin/ProUpsell.php:85
 msgid "Coming soon"
@@ -141,8 +140,8 @@ msgid ""
 "General). The options here set the store-wide defaults that those products "
 "inherit."
 msgstr ""
-"Oznacz dowolny produkt jako zamówienie w przedsprzedaży w edytorze produktów "
-"(Dane produktu > Ogólne). Opcje tutaj ustawiają domyślne ustawienia całego "
+"Oznacz dowolny produkt jako zamówienie w przedsprzedaży w edytorze produktów"
+" (Dane produktu > Ogólne). Opcje tutaj ustawiają domyślne ustawienia całego "
 "sklepu, które dziedziczą te produkty."
 
 #: src/Admin/Settings.php:151
@@ -171,8 +170,8 @@ msgid ""
 msgstr ""
 "Umożliwia zakup oznaczonych produktów, gdy są one niedostępne, i wyświetla "
 "przycisk zamówienia w przedsprzedaży. Wyłącz tę opcję, aby jednym "
-"kliknięciem wstrzymać każde zamówienie w przedsprzedaży w całym sklepie, bez "
-"usuwania oznaczenia każdego produktu. Domyślnie: włączone."
+"kliknięciem wstrzymać każde zamówienie w przedsprzedaży w całym sklepie, bez"
+" usuwania oznaczenia każdego produktu. Domyślnie: włączone."
 
 #: src/Admin/Settings.php:184
 msgid "Pre-order button"
@@ -181,7 +180,8 @@ msgstr "Przycisk zamówienia w przedsprzedaży"
 #: src/Admin/Settings.php:186
 msgid "The label shoppers see in place of the usual add-to-cart text."
 msgstr ""
-"Etykieta, którą kupujący widzą zamiast zwykłego tekstu dodawanego do koszyka."
+"Etykieta, którą kupujący widzą zamiast zwykłego tekstu dodawanego do "
+"koszyka."
 
 #: src/Admin/Settings.php:193
 msgid "Default button text"
@@ -195,8 +195,8 @@ msgstr "Kupujący widzą:"
 #: src/Admin/Settings.php:213
 #, php-format
 msgid ""
-"Replaces the add-to-cart label on pre-order products across the store. Leave "
-"blank to use %s."
+"Replaces the add-to-cart label on pre-order products across the store. Leave"
+" blank to use %s."
 msgstr ""
 "Zastępuje etykietę dodawania do koszyka na produktach w przedsprzedaży w "
 "całym sklepie. Zostaw puste, aby użyć %s."
@@ -211,21 +211,21 @@ msgstr "Nie masz uprawnień do zarządzania tymi ustawieniami."
 
 #: src/Service/PreorderService.php:129
 msgid "Releases in"
-msgstr ""
+msgstr "Premiera za"
 
 #. translators: %s: time left until the release, e.g. "2 hrs 5 min".
 #: src/Service/PreorderService.php:131
 #, php-format
 msgid "Releases in %s"
-msgstr ""
+msgstr "Premiera za %s"
 
 #: src/Service/PreorderService.php:132
 msgid "Release countdown"
-msgstr ""
+msgstr "Odliczanie do premiery"
 
 #: src/Service/PreorderService.php:133
 msgid "The release date has arrived."
-msgstr ""
+msgstr "Nadszedł dzień premiery."
 
 #. translators: %s: formatted release date
 #: src/Service/PreorderService.php:306
@@ -239,7 +239,8 @@ msgstr "Zarezerwowane jako zamówienie w przedsprzedaży"
 
 #: src/Service/PreorderService.php:321
 msgid ""
-"Not in stock yet, your order holds a place in line and ships when it arrives."
+"Not in stock yet, your order holds a place in line and ships when it "
+"arrives."
 msgstr ""
 "Jeszcze niedostępne. Twoje zamówienie czeka w kolejce i zostanie wysłane, "
 "gdy dotrze."
@@ -275,37 +276,36 @@ msgstr "Zamów w przedsprzedaży"
 
 #, php-format
 #~ msgid ""
-#~ "Replaces the add-to-cart label on pre-order products. Leave blank to use "
-#~ "%s. Any single product can override this from its own editor."
+#~ "Replaces the add-to-cart label on pre-order products. Leave blank to use %s."
+#~ " Any single product can override this from its own editor."
 #~ msgstr ""
 #~ "Zastępuje etykietę „dodaj do koszyka” na produktach zamówionych w "
-#~ "przedsprzedaży. Pozostaw puste, aby użyć %s. Każdy pojedynczy produkt "
-#~ "może zastąpić to ustawienie w swoim własnym edytorze."
+#~ "przedsprzedaży. Pozostaw puste, aby użyć %s. Każdy pojedynczy produkt może "
+#~ "zastąpić to ustawienie w swoim własnym edytorze."
 
 #, php-format
 #~ msgid "od %d zł/rok"
 #~ msgstr "od %d zł/rok"
 
 #~ msgid ""
-#~ "Mark individual products as pre-orders from the product editor (Product "
-#~ "data > General). These options control the storefront defaults."
+#~ "Mark individual products as pre-orders from the product editor (Product data"
+#~ " > General). These options control the storefront defaults."
 #~ msgstr ""
 #~ "Oznaczaj poszczególne produkty jako dostępne w przedsprzedaży w edytorze "
-#~ "produktu (Dane produktu > Ogólne). Te opcje sterują domyślnymi "
-#~ "ustawieniami sklepu."
+#~ "produktu (Dane produktu > Ogólne). Te opcje sterują domyślnymi ustawieniami "
+#~ "sklepu."
 
 #~ msgid ""
-#~ "When off, products flagged as pre-orders behave like normal products. "
-#~ "Turn this off to pause pre-orders store-wide without editing each product."
+#~ "When off, products flagged as pre-orders behave like normal products. Turn "
+#~ "this off to pause pre-orders store-wide without editing each product."
 #~ msgstr ""
-#~ "Po wyłączeniu produkty oznaczone jako przedsprzedaż zachowują się jak "
-#~ "zwykłe produkty. Wyłącz tę opcję, aby wstrzymać przedsprzedaż w całym "
-#~ "sklepie bez edytowania każdego produktu."
+#~ "Po wyłączeniu produkty oznaczone jako przedsprzedaż zachowują się jak zwykłe"
+#~ " produkty. Wyłącz tę opcję, aby wstrzymać przedsprzedaż w całym sklepie bez "
+#~ "edytowania każdego produktu."
 
 #~ msgid ""
 #~ "Add-to-cart label shown for pre-order products. Individual products can "
 #~ "override this in the product editor."
 #~ msgstr ""
 #~ "Etykieta przycisku dodawania do koszyka wyświetlana dla produktów w "
-#~ "przedsprzedaży. Poszczególne produkty mogą ją nadpisać w edytorze "
-#~ "produktu."
+#~ "przedsprzedaży. Poszczególne produkty mogą ją nadpisać w edytorze produktu."
